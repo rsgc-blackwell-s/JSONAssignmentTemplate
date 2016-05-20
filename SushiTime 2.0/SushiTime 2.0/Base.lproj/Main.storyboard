@@ -36,6 +36,9 @@
                                 <rect key="frame" x="74" y="207" width="172" height="49"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="21"/>
                                 <state key="normal" title="Is it Sushi Time?"/>
+                                <connections>
+                                    <action selector="getDataButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rnd-e7-SPT"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R3t-jE-h2M">
                                 <rect key="frame" x="108" y="476" width="104" height="28"/>
@@ -59,6 +62,13 @@
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="TextField" destination="AUT-Ar-0A1" id="4PQ-FK-X7l"/>
+                        <outlet property="cityNameLabel" destination="R3t-jE-h2M" id="Kgw-tl-cj2"/>
+                        <outlet property="cityTempLabel" destination="K3f-ji-V6K" id="V8F-Dz-DSg"/>
+                        <outlet property="getData" destination="3Pb-u2-GZt" id="pu8-d5-8C6"/>
+                        <outlet property="locationTextField" destination="AUT-Ar-0A1" id="beE-Vp-ZuV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
