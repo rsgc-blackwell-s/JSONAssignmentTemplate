@@ -50,23 +50,31 @@ class ViewController: UIViewController {
         var jsonError: NSError?
         
         //should return as structure (to be parsed as NSDictionary...)
-        let json = NSJSONSerialization.JSONObjectWithData(weatherData, options: [], error: &jsonError) as NSDictionary
-        
-        //CITY
-        //if we get a value, the name perameter will be set
-        if let name = json["name"] as? String { //parsing (extraction city name)
-            cityNameLabel.text = name
-        }
-        
-        //TEMP
-        //
-        if let main = json["main"] as NSDictionary {
-            if let temp = main["temp"] as? Double { //parsing (extracting temp)
-                //add 273.15
-                cityTempLabel.text = String(format: "%.1f", temp)
-                
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(weatherData, options: []) as? NSDictionary
+            
+            //CITY
+            //if we get a value, the name perameter will be set
+            if let name = json!["name"] as? String { //parsing (extraction city name)
+                cityNameLabel.text = name
             }
+            
+            //TEMP
+            //
+            if let main = json!["main"] as? NSDictionary {
+                if let temp = main["temp"] as? Double { //parsing (extracting temp)
+                    //add 273.15
+                    cityTempLabel.text = String(format: "%.1f", temp)
+                    
+                }
+            }
+            
+        } catch let error as NSError {
+            print ("Failed to load: \(error.localizedDescription)")
         }
+        
+
+        
     }
 }
 
