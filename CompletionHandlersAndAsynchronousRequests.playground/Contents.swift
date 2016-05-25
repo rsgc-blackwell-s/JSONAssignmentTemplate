@@ -21,7 +21,7 @@ class ViewController : UIViewController {
             
             // Do the initial de-serialization
             // Source JSON is here:
-            // http://www.learnswiftonline.com/Samples/subway.json
+            // http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf
             //
             let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments) as! AnyObject
             
@@ -33,6 +33,7 @@ class ViewController : UIViewController {
             // Now we can parse this...
             print("")
             print("Now, add your parsing code here...")
+            
             
             // Now we can update the UI
             // (must be done asynchronously)
@@ -95,7 +96,7 @@ class ViewController : UIViewController {
         }
         
         // Define a URL to retrieve a JSON file from
-        let address : String = "http://www.learnswiftonline.com/Samples/subway.json"
+        let address : String = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf"
         
         // Try to make a URL request object
         if let url = NSURL(string: address) {

@@ -11,11 +11,10 @@ import UIKit
 class ViewController: UIViewController {
     
     //outlets
-    
-    @IBOutlet weak var cityNameTextField: UITextField!
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityTempLabel: UILabel!
     @IBOutlet weak var answerLabel: UILabel!
+    @IBOutlet weak var cityNameTextField: UITextField!
     
     //if button pressed: get localized weather (based on user input)
     
@@ -40,9 +39,10 @@ class ViewController: UIViewController {
         
         //http request
         let task = NSURLSession.sharedSession().dataTaskWithURL(url!) { (data, response, error) in
-            dispatch_async(dispatch_get_main_queue(), {
-                self.setLabels(data!)
-            })
+            print(data)
+//            dispatch_async(dispatch_get_main_queue(), {
+//                self.setLabels(data!)
+//            })
         }
         
         task.resume() //debug - start task from its suspension state
