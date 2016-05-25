@@ -47,7 +47,7 @@ class ViewController: UIViewController {
 
     //setting labels
     func setLabels(weatherData: NSData){
-        var jsonError: NSError?
+        //var jsonError: NSError?
         
         //should return as structure (to be parsed as NSDictionary...)
         do {
