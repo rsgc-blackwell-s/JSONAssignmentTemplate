@@ -11,15 +11,18 @@ import UIKit
 class ViewController: UIViewController {
     
     //outlets
+    
     @IBOutlet weak var cityNameTextField: UITextField!
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityTempLabel: UILabel!
+    @IBOutlet weak var answerLabel: UILabel!
     
     //if button pressed: get localized weather (based on user input)
+    
     @IBAction func getDataButton(sender: AnyObject) {
-        getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
+         getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
     }
-
+    
     //call for API data
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +53,9 @@ class ViewController: UIViewController {
         //var jsonError: NSError?
         
         //should return as structure (to be parsed as NSDictionary...)
+        
+        //func getMyJSON (){
+        
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(weatherData, options: []) as? NSDictionary
             
@@ -79,3 +85,4 @@ class ViewController: UIViewController {
 }
 
 
+//}
