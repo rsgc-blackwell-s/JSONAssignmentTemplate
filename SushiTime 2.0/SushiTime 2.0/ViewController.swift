@@ -11,18 +11,17 @@ import UIKit
 class ViewController: UIViewController {
     
     //outlets
-//    @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityTempLabel: UILabel!
     @IBOutlet weak var answerLabel: UILabel!
-//    @IBOutlet weak var cityNameTextField: UITextField!
     
-//    //if button pressed: get localized weather (based on user input)
-//    
+    @IBOutlet weak var sushiPicture: UIImageView!
+    
+    //if button pressed: get localized weather (based on user input)
    @IBAction func getDataButton(sender: AnyObject) {
        //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
     }
-//    
-//    //call for API data
+    
+    //call for API data
     override func viewDidLoad() {
         super.viewDidLoad()
         //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf")
@@ -93,6 +92,8 @@ class ViewController: UIViewController {
                         
                         if (tempInt - 273 >= 20){
                             answerLabel.text = ("Go get some sushi my friend!")
+                        } else {
+                            answerLabel.text = ("No sushi for you silly boy!")
                         }
                         
                     }
@@ -192,56 +193,4 @@ class ViewController: UIViewController {
 
 
 
-//    //get weather data in String
-//    func getWeatherData(urlString: String) {
-//        let url = NSURL(string: urlString) //creating URL object
-//        
-//        //http request
-//        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) { (data, response, error) in
-//            print(data)
-////            dispatch_async(dispatch_get_main_queue(), {
-////                self.setLabels(data!)
-////            })
-//        }
-//        
-//        task.resume() //debug - start task from its suspension state
-//    }
-//
-//    //setting labels
-//    func setLabels(weatherData: NSData){
-//        //var jsonError: NSError?
-//        
-//        //should return as structure (to be parsed as NSDictionary...)
-//        
-//        func getMyJSON (){
-//        
-//        do {
-//            let json = try NSJSONSerialization.JSONObjectWithData(weatherData, options: []) as? NSDictionary
-//            
-//            //CITY
-//            //if we get a value, the name perameter will be set
-//            if let name = json!["name"] as? String { //parsing (extraction city name)
-//                cityNameLabel.text = name
-//            }
-//            
-//            //TEMP
-//            //
-//            if let main = json!["main"] as? NSDictionary {
-//                if let temp = main["temp"] as? Double { //parsing (extracting temp)
-//                    //add 273.15
-//                    cityTempLabel.text = String(format: "%.1f", temp)
-//                    
-//                }
-//            }
-//            
-//        } catch let error as NSError {
-//            print ("Failed to load: \(error.localizedDescription)")
-//        }
-//        
-//
-//        
-//    }
-//}
-//
-//
 }
