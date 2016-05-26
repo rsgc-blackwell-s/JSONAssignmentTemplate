@@ -11,10 +11,10 @@ import UIKit
 class ViewController: UIViewController {
     
     //outlets
-    @IBOutlet weak var cityNameLabel: UILabel!
+//    @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityTempLabel: UILabel!
     @IBOutlet weak var answerLabel: UILabel!
-    @IBOutlet weak var cityNameTextField: UITextField!
+//    @IBOutlet weak var cityNameTextField: UITextField!
     
 //    //if button pressed: get localized weather (based on user input)
 //    
@@ -81,8 +81,13 @@ class ViewController: UIViewController {
                     
                     let TempOpt = (weatherMain["temp"])
                     
-                    if let temp = TempOpt{
+                    if let temp = TempOpt {
                         print (temp)
+                        
+                        let tempInt: Int = temp as! Int
+                        print (tempInt - 273)
+                        
+                        cityTempLabel.text = ("\(tempInt - 273)˙C")
                     }
                 }
             }
