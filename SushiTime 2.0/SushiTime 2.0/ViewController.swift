@@ -16,16 +16,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var answerLabel: UILabel!
     @IBOutlet weak var cityNameTextField: UITextField!
     
-    //if button pressed: get localized weather (based on user input)
-    
-    @IBAction func getDataButton(sender: AnyObject) {
-         getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
+//    //if button pressed: get localized weather (based on user input)
+//    
+   @IBAction func getDataButton(sender: AnyObject) {
+       //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
     }
-    
-    //call for API data
+//    
+//    //call for API data
     override func viewDidLoad() {
         super.viewDidLoad()
-        getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf")
+        //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf")
+    
+    getMyJSON()
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,56 +36,200 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    //get weather data in String
-    func getWeatherData(urlString: String) {
-        let url = NSURL(string: urlString) //creating URL object
+    // Views that need to be accessible to all methods
+    let jsonResult = UILabel()
+    
+    // If data is successfully retrieved from the server, we can parse it here
+    func parseMyJSON(theData : NSData) {
         
-        //http request
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) { (data, response, error) in
-            print(data)
-//            dispatch_async(dispatch_get_main_queue(), {
-//                self.setLabels(data!)
-//            })
-        }
+        // Print the provided data
+        print("")
+        print("====== the data provided to parseMyJSON is as follows ======")
+        print(theData)
         
-        task.resume() //debug - start task from its suspension state
-    }
-
-    //setting labels
-    func setLabels(weatherData: NSData){
-        //var jsonError: NSError?
-        
-        //should return as structure (to be parsed as NSDictionary...)
-        
-        //func getMyJSON (){
-        
+        // De-serializing JSON can throw errors, so should be inside a do-catch structure
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(weatherData, options: []) as? NSDictionary
             
-            //CITY
-            //if we get a value, the name perameter will be set
-            if let name = json!["name"] as? String { //parsing (extraction city name)
-                cityNameLabel.text = name
+            // Do the initial de-serialization
+            // Source JSON is here:
+            // http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=9aa3efef6de3b5bd8331807ab02d36cf
+            //
+            let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments)
+            
+            // Print retrieved JSON
+            print("")
+            print("====== the retrieved JSON is as follows ======")
+            print(json)
+            
+            // Now we can parse this...
+            print("")
+            print("Now, add your parsing code here...")
+            
+            if let weatherData = json as? [String : AnyObject] {
+                
+                // if this worked, I have a dictionary
+                print("=======")
+                print("The value for the 'main' key is: ")
+                print(weatherData["main"])
+                print("=======")
+                
+                if let weatherMain = weatherData["main"] as? [String : AnyObject] {
+                    
+                    // if this worked, we can use this data
+                    print("======= Temperature =======")
+                    print(weatherMain["temp"])
+                    
+                    let TempOpt = (weatherMain["temp"])
+                    
+                    if let temp = TempOpt{
+                        print (temp)
+                    }
+                }
             }
             
-            //TEMP
-            //
-            if let main = json!["main"] as? NSDictionary {
-                if let temp = main["temp"] as? Double { //parsing (extracting temp)
-                    //add 273.15
-                    cityTempLabel.text = String(format: "%.1f", temp)
-                    
-                }
+            // Now we can update the UI
+            // (must be done asynchronously)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.jsonResult.text = "parsed JSON should go here"
             }
             
         } catch let error as NSError {
             print ("Failed to load: \(error.localizedDescription)")
         }
         
-
         
     }
+    
+    // Set up and begin an asynchronous request for JSON data
+    func getMyJSON() {
+        
+        // Define a completion handler
+        // The completion handler is what gets called when this **asynchronous** network request is completed.
+        // This is where we'd process the JSON retrieved
+        let myCompletionHandler : (NSData?, NSURLResponse?, NSError?) -> Void = {
+            
+            (data, response, error) in
+            
+            // This is the code run when the network request completes
+            // When the request completes:
+            //
+            // data - contains the data from the request
+            // response - contains the HTTP response code(s)
+            // error - contains any error messages, if applicable
+            
+            // Cast the NSURLResponse object into an NSHTTPURLResponse object
+            if let r = response as? NSHTTPURLResponse {
+                
+                // If the request was successful, parse the given data
+                if r.statusCode == 200 {
+                    
+                    // Show debug information (if a request was completed successfully)
+                    print("")
+                    print("====== data from the request follows ======")
+                    print(data)
+                    print("")
+                    print("====== response codes from the request follows ======")
+                    print(response)
+                    print("")
+                    print("====== errors from the request follows ======")
+                    print(error)
+                    
+                    if let d = data {
+                        
+                        // Parse the retrieved data
+                        self.parseMyJSON(d)
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        // Define a URL to retrieve a JSON file from
+        let address : String = "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=9aa3efef6de3b5bd8331807ab02d36cf"
+        
+        // Try to make a URL request object
+        if let url = NSURL(string: address) {
+            
+            // We have an valid URL to work with
+            print(url)
+            
+            // Now we create a URL request object
+            let urlRequest = NSURLRequest(URL: url)
+            
+            // Now we need to create an NSURLSession object to send the request to the server
+            let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+            let session = NSURLSession(configuration: config)
+            
+            // Now we create the data task and specify the completion handler
+            let task = session.dataTaskWithRequest(urlRequest, completionHandler: myCompletionHandler)
+            
+            // Finally, we tell the task to start (despite the fact that the method is named "resume")
+            task.resume()
+            
+        } else {
+            
+            // The NSURL object could not be created
+            print("Error: Cannot create the NSURL object.")
+            
+        }
+        
 }
 
 
+
+//    //get weather data in String
+//    func getWeatherData(urlString: String) {
+//        let url = NSURL(string: urlString) //creating URL object
+//        
+//        //http request
+//        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) { (data, response, error) in
+//            print(data)
+////            dispatch_async(dispatch_get_main_queue(), {
+////                self.setLabels(data!)
+////            })
+//        }
+//        
+//        task.resume() //debug - start task from its suspension state
+//    }
+//
+//    //setting labels
+//    func setLabels(weatherData: NSData){
+//        //var jsonError: NSError?
+//        
+//        //should return as structure (to be parsed as NSDictionary...)
+//        
+//        func getMyJSON (){
+//        
+//        do {
+//            let json = try NSJSONSerialization.JSONObjectWithData(weatherData, options: []) as? NSDictionary
+//            
+//            //CITY
+//            //if we get a value, the name perameter will be set
+//            if let name = json!["name"] as? String { //parsing (extraction city name)
+//                cityNameLabel.text = name
+//            }
+//            
+//            //TEMP
+//            //
+//            if let main = json!["main"] as? NSDictionary {
+//                if let temp = main["temp"] as? Double { //parsing (extracting temp)
+//                    //add 273.15
+//                    cityTempLabel.text = String(format: "%.1f", temp)
+//                    
+//                }
+//            }
+//            
+//        } catch let error as NSError {
+//            print ("Failed to load: \(error.localizedDescription)")
+//        }
+//        
+//
+//        
+//    }
 //}
+//
+//
+}

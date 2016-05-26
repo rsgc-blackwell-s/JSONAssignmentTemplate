@@ -21,9 +21,9 @@ class ViewController : UIViewController {
             
             // Do the initial de-serialization
             // Source JSON is here:
-            // http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf
+            // http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=9aa3efef6de3b5bd8331807ab02d36cf
             //
-            let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments) as! AnyObject
+            let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments) 
             
             // Print retrieved JSON
             print("")
@@ -34,6 +34,21 @@ class ViewController : UIViewController {
             print("")
             print("Now, add your parsing code here...")
             
+            if let weatherData = json as? [String : AnyObject] {
+                
+                // if this worked, I have a dictionary
+                print("=======")
+                print("The value for the 'main' key is: ")
+                print(weatherData["main"])
+                print("=======")
+                
+                if let weatherMain = weatherData["main"] as? [String : AnyObject] {
+                    
+                    // if this worked, we can use this data
+                    print("======= Temperature =======")
+                    print(weatherMain["temp"])
+                }
+            }
             
             // Now we can update the UI
             // (must be done asynchronously)
@@ -65,7 +80,7 @@ class ViewController : UIViewController {
             // response - contains the HTTP response code(s)
             // error - contains any error messages, if applicable
             
-            // Cast the NSURLResponse object into an NSHTTPURLResponse objecct
+            // Cast the NSURLResponse object into an NSHTTPURLResponse object
             if let r = response as? NSHTTPURLResponse {
                 
                 // If the request was successful, parse the given data
@@ -96,7 +111,7 @@ class ViewController : UIViewController {
         }
         
         // Define a URL to retrieve a JSON file from
-        let address : String = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf"
+        let address : String = "http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=9aa3efef6de3b5bd8331807ab02d36cf"
         
         // Try to make a URL request object
         if let url = NSURL(string: address) {
