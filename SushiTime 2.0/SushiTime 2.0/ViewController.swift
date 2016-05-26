@@ -81,13 +81,20 @@ class ViewController: UIViewController {
                     
                     let TempOpt = (weatherMain["temp"])
                     
+                    //converting temp to an optional
                     if let temp = TempOpt {
                         print (temp)
                         
+                        //converting optional value to an int
                         let tempInt: Int = temp as! Int
                         print (tempInt - 273)
                         
                         cityTempLabel.text = ("\(tempInt - 273)˙C")
+                        
+                        if (tempInt - 273 >= 20){
+                            answerLabel.text = ("Go get some sushi my friend!")
+                        }
+                        
                     }
                 }
             }
