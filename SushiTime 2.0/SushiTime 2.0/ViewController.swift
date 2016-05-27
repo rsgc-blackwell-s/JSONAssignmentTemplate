@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     // Views that need to be accessible to all methods
     let jsonResult = UILabel()
     
@@ -110,9 +110,9 @@ class ViewController: UIViewController {
             
             // Now we can update the UI
             // (must be done asynchronously)
-//            dispatch_async(dispatch_get_main_queue()) {
-//                self.jsonResult.text = "parsed JSON should go here"
-//            }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.jsonResult.text = "parsed JSON should go here"
+            }
             
         } catch let error as NSError {
             print ("Failed to load: \(error.localizedDescription)")
