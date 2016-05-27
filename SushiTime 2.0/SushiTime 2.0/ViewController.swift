@@ -10,21 +10,24 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    //outlets
+    //label outlets
     @IBOutlet weak var cityTempLabel: UILabel!
     @IBOutlet weak var answerLabel: UILabel!
     
-    @IBOutlet weak var sushiPicture: UIImageView!
+    //loading icon outlet
+    @IBOutlet weak var loadingIcon: UIActivityIndicatorView!
     
-    //if button pressed: get localized weather (based on user input)
-   @IBAction func getDataButton(sender: AnyObject) {
-       //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=\(cityNameTextField.text)")
-    }
+    //sushi image outlet
+    @IBOutlet weak var sushiPicture: UIImageView!
     
     //call for API data
     override func viewDidLoad() {
         super.viewDidLoad()
         //getWeatherData("http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=9aa3efef6de3b5bd8331807ab02d36cf")
+        
+        //start loading icon; hide when finished
+        loadingIcon.startAnimating()
+        loadingIcon.hidesWhenStopped = true;
     
     getMyJSON()
     
@@ -52,7 +55,6 @@ class ViewController: UIViewController {
             // Do the initial de-serialization
             // Source JSON is here:
             // http://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=9aa3efef6de3b5bd8331807ab02d36cf
-            //
             let json = try NSJSONSerialization.JSONObjectWithData(theData, options: NSJSONReadingOptions.AllowFragments)
             
             // Print retrieved JSON
@@ -78,6 +80,7 @@ class ViewController: UIViewController {
                     print("======= Temperature =======")
                     print(weatherMain["temp"])
                     
+                    //declaring TempOpt
                     let TempOpt = (weatherMain["temp"])
                     
                     //converting temp to an optional
@@ -88,12 +91,17 @@ class ViewController: UIViewController {
                         let tempInt: Int = temp as! Int
                         print (tempInt - 273)
                         
+                        //display temperature to user
                         cityTempLabel.text = ("\(tempInt - 273)˙C")
                         
+                        //stop loading icon when data is retrieved
+                        loadingIcon.stopAnimating()
+                        
+                        //deciding if it's sushi time or not!
                         if (tempInt - 273 >= 20){
-                            answerLabel.text = ("Go get some sushi my friend!")
+                            answerLabel.text = ("Very hot! Go get some sushi my friend!")
                         } else {
-                            answerLabel.text = ("No sushi for you silly boy!")
+                            answerLabel.text = ("So cold! No sushi for you silly!")
                         }
                         
                     }
@@ -102,9 +110,9 @@ class ViewController: UIViewController {
             
             // Now we can update the UI
             // (must be done asynchronously)
-            dispatch_async(dispatch_get_main_queue()) {
-                self.jsonResult.text = "parsed JSON should go here"
-            }
+//            dispatch_async(dispatch_get_main_queue()) {
+//                self.jsonResult.text = "parsed JSON should go here"
+//            }
             
         } catch let error as NSError {
             print ("Failed to load: \(error.localizedDescription)")
